@@ -90,7 +90,7 @@ class MainContentController extends Controller
 		$grid->disableRowSelector();
 		$grid->disableExport();
 		$grid->disableColumnSelector();
-		//$grid->disableFilter();
+		$grid->disableFilter();
 		//$grid->disableCreateButton();
 		//$grid->disableActions();
 		//自訂
@@ -109,6 +109,10 @@ class MainContentController extends Controller
 			$actions->disableView();
 			
 			//$actions->disableDelete();
+		});
+		$grid->tools(function (Grid\Tools $tools) {
+			$data = GetCjData::GetLevelViewData();
+			$tools->append(new \App\Admin\Actions\ActiveSelect($data));
 		});
 		$grid->model()->orderBy('title_id')->orderBy('place');
 		/* form rules "saving" can't catch

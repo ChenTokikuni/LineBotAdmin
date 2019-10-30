@@ -33,4 +33,20 @@ class GetCjData
 		
 		return $match_name;
 	}
+	public static function GetLevelViewData()
+	{
+		$data = [];
+		$rows = DB::table('main_content')->count('id');
+		$data[0]['name'] = '所有优惠';
+		$data[0]['title_id'] = '';
+		$data[0]['level_count'] = $rows;
+		$rows = DB::table('main_content')->select('title_id', DB::raw('count( title_id) as level_count'))->groupBy('title_id')->get()->toArray();
+		foreach ($rows as $k=>$v) {
+			$data[$k+1]['name'] = GetCjData::GetMatchLevelName($v->title_id);
+			$data[$k+1]['title_id'] = $v->title_id;
+			$data[$k+1]['level_count'] = $v->level_count;
+		}
+		
+		return $data;
+	}
 }
